@@ -40,6 +40,8 @@ print_words() and print_top().
 """
 
 import sys
+import re
+import operator
 
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
@@ -51,6 +53,42 @@ import sys
 
 # This basic command line argument parsing code is provided and
 # calls the print_words() and print_top() functions which you must define.
+def sort_words_in_dict(contents):
+    fileList = contents.split()
+
+    wordsDict = {}
+
+    for word in fileList:
+        if word.lower() in wordsDict:
+            wordsDict[word.lower()] += 1
+        else:
+            wordsDict[word.lower()] = 1
+
+    return wordsDict
+
+def print_words(filename):
+    f = open(filename, 'r')
+    contents = f.read()
+    fileList = contents.split()
+
+    wordsDict = sort_words_in_dict(contents)
+
+    for word in sorted(wordsDict.keys()):
+        print word + ': ' + str(wordsDict[word])
+
+def print_top(filename):
+    f = open(filename, 'r')
+    contents = f.read()
+    fileList = contents.split()
+
+    wordsDict = sort_words_in_dict(contents)
+
+    count = 1
+
+    for word, value in sorted(wordsDict.items(), key=lambda item: item[1], reverse = True):
+        print word + ': ' + str(wordsDict[word])
+        count +=1
+        if count >= 20: break
 
 
 def main():
@@ -67,7 +105,6 @@ def main():
     else:
         print 'unknown option: ' + option
         sys.exit(1)
-
 
 if __name__ == '__main__':
     main()
